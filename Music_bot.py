@@ -8,7 +8,7 @@ from telebot import types
 bot = telebot.TeleBot(config.token)
 
 
-# Мое сообщение, тест github
+# Мое сообщение, тест github jkjj
 @bot.message_handler(commands=['test'])
 def find_file_ids(message):
     for filename in os.listdir('music/'):
