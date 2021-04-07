@@ -1,14 +1,16 @@
 import telebot
 import time
-import config
 import os
 import random
 from telebot import types
+from configparser import ConfigParser
+import dialogflow
 
-bot = telebot.TeleBot(config.token)
+config = ConfigParser()
+config.read('config.ini')
+bot = telebot.TeleBot(config['TELEGRAM']['token'])
 
 
-# Мое сообщение, тест github jkjj
 @bot.message_handler(commands=['test'])
 def find_file_ids(message):
     for filename in os.listdir('music/'):
@@ -43,7 +45,7 @@ def location(message):
     if message.location is not None:
         print(message.location)
         print("latitude: %s; longitude: %s" % (message.location.latitude, message.location.longitude))
-        
+
 @bot.message_handler(content_types=["contact"])
 def contact(message):
     if message.contact is not None:
@@ -56,6 +58,13 @@ def contact(message):
 @bot.message_handler(func=lambda message: message.text == "Моя кнопка")
 def command_text_hi(m):
     bot.send_message(m.chat.id, "I love you too!")
+
+
+@bot.message_handler(content_types=["text"])
+def custom_message(message):
+    session_id = f'telegram-{message.chat.id}'
+    answer = dialogflow.detect_intent_text(session_id, message.text)
+    bot.send_message(message.chat.id, answer)
 
 
 

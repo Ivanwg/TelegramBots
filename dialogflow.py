@@ -38,7 +38,4 @@ def detect_intent_text(session_id, text):
         )
     )
     print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
-
-
-text = input()
-detect_intent_text('1', text)
+    return response.query_result.fulfillment_text
